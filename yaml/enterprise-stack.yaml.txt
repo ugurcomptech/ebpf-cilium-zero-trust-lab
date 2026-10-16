@@ -1,0 +1,145 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: enterprise-app
+---
+# Database Katmanı (PostgreSQL)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-db
+  namespace: enterprise-app
+  labels:
+    app: enterprise-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: enterprise-db
+  template:
+    metadata:
+      labels:
+        app: enterprise-db
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        env:
+        - name: POSTGRES_PASSWORD
+          value: enterpriseSecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-svc
+  namespace: enterprise-app
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: enterprise-db
+---
+# Cache Katmanı (Redis)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-cache
+  namespace: enterprise-app
+  labels:
+    app: enterprise-cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: enterprise-cache
+  template:
+    metadata:
+      labels:
+        app: enterprise-cache
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cache-svc
+  namespace: enterprise-app
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: enterprise-cache
+---
+# Backend API Katmanı (Nginx / HTTP Server)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-backend
+  namespace: enterprise-app
+  labels:
+    app: enterprise-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: enterprise-backend
+  template:
+    metadata:
+      labels:
+        app: enterprise-backend
+    spec:
+      containers:
+      - name: api
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+  namespace: enterprise-app
+spec:
+  ports:
+  - port: 8080
+    targetPort: 80
+  selector:
+    app: enterprise-backend
+---
+# Frontend Katmanı (Nginx)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-frontend
+  namespace: enterprise-app
+  labels:
+    app: enterprise-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: enterprise-frontend
+  template:
+    metadata:
+      labels:
+        app: enterprise-frontend
+    spec:
+      containers:
+      - name: web
+        image: nginx:alpine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+  namespace: enterprise-app
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: frontend

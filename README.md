@@ -307,6 +307,12 @@ spec:
     - matchLabels:
         app: enterprise-frontend
 ```
+Cluster'a basalım:
+
+```
+kubectl apply -f l7-policy.yaml
+```
+
 
 ## Hubble UI ile Görsel Gözlem
 

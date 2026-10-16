@@ -1,0 +1,21 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: l7-api-filter
+  namespace: enterprise-app
+spec:
+  endpointSelector:
+    matchLabels:
+      app: enterprise-backend
+  ingress:
+  - toPorts:
+    - ports:
+      - port: "8080"
+        protocol: TCP
+      rules:
+        http:
+        - method: "GET"
+          path: "/public"
+    fromEndpoints:
+    - matchLabels:
+        app: enterprise-frontend
