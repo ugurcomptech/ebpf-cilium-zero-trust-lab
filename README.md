@@ -20,7 +20,7 @@ Proje; klasik IP/Port (L4) engellemelerinin ötesine geçerek Envoy proxy entegr
 
 ---
 
-## Gereksinimler (Prerequisite)
+## Gereksinimler
 
 * **2 Adet Sanal Sunucu (VDS / Cloud VM - Ubuntu 24.04 LTS önerilir):**
   * **Master Node:** Min. 2 vCPU, 4 GB RAM
@@ -323,7 +323,7 @@ kubectl port-forward -n kube-system svc/hubble-ui 12000:80 --address 0.0.0.0
 ```
 - Tarayıcınızdan http://<MASTER_IP>:12000 adresine gidin ve enterprise-app namespace'ini seçin.
 
-## Karşılaşılan Yaygın Sorunlar ve Çözümleri (Troubleshooting)
+## Karşılaşılan Yaygın Sorunlar ve Çözümleri
 
 1- 503 Service Unavailable / Connection Refused (L7 Testlerinde):
 
