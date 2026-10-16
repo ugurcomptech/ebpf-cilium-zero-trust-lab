@@ -65,7 +65,7 @@ helm install cilium cilium/cilium --namespace kube-system \
 ```
 
 
-## Test: Kurumsal Mimariyi Deploy Etme (4-Tier Stack)
+## Kurumsal Mimariyi Deploy Etme (4-Tier Stack)
 
 Tüm katmanları (frontend, backend, cache, database) ve aralarındaki sıfır-güven eBPF kurallarını tek komutla ayağa kaldıralım.
 
